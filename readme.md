@@ -27,13 +27,45 @@ envsubst < .bootstrap/argocd.yaml | oc apply -f -
 envsubst < .bootstrap/root-application.yaml | oc apply -f -
 ```
 
-To get the prod and non-prod cluster created you'll have to prepare a secret in the way ACM expects it, then run:
+To get the prod and non-prod cluster created you'll have to prepare a secret in the way ACM expects it. Here is an example of this secret required by ACM.
+
+```yaml
+apiVersion: v1
+stringData:
+  additionalTrustBundle: ""
+  aws_access_key_id: "-----"
+  aws_secret_access_key: "-----"
+  baseDomain: "the root domain of the SOA Record in your DNS"
+  httpProxy: ""
+  httpsProxy: ""
+  noProxy: ""
+  pullSecret: "copy yours from https://console.redhat.com/openshift/downloads#tool-pull-secret"
+  ssh-privatekey: "-----"
+  ssh-publickey: "-----"
+kind: Secret
+metadata:
+  labels:
+    cluster.open-cluster-management.io/credentials: ""
+    cluster.open-cluster-management.io/type: aws
+  name: aws-credentials
+  namespace: open-cluster-management
+type: Opaque
+```
+
+copy&paste inside `./.rosa/aws-secret.yaml`
+
+then run:
 
 ```sh
 oc new-project open-cluster-management
 oc delete secret aws-credentials -n open-cluster-management
 oc apply -f ./.rosa/aws-secret.yaml
 ```
+
+> NOTE: you can also use the ACM Console to create it following the UI guided form. Go to https://your-console-url/multicloud/credentials, and select your cloud provider (AWS in our case).
+
+> NOTE: after creating this `aws-secret` you may also "force" Argo to reconsile the `ClusterDeployment` resource for bothe `prod` and `non-prod`. To do that go to ArgoCD Console open the `non-prod` Application and manually delete the `clusterdepoyment` resource. This will force Argo reconsile it and start the cluster provisioning job.
+> 
 
 To deploy RHDH run the following (you need to have prepared the secret)
 ```sh
