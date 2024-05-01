@@ -57,7 +57,6 @@ copy&paste inside `./.rosa/aws-secret.yaml`
 then run:
 
 ```sh
-oc new-project open-cluster-management
 oc delete secret aws-credentials -n open-cluster-management
 oc apply -f ./.rosa/aws-secret.yaml
 ```
@@ -69,9 +68,8 @@ oc apply -f ./.rosa/aws-secret.yaml
 
 To deploy RHDH run the following (you need to have prepared the secret)
 ```sh
-oc new-project redhat-developer-hub
 oc delete secret rhdh-pull-secret -n redhat-developer-hub
 oc delete secret github-pat -n redhat-developer-hub
-oc create -f ./clusters/hub/overlays/redhat-developer-hub/rhdh-pull-secret.yaml -n redhat-developer-hub
+oc create -f ./clusters/hub/overlays/redhat-developer-hub/rhdh-pull-secret.yml -n redhat-developer-hub
 ```
 

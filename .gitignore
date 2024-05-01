@@ -5,4 +5,3 @@ access.md
 clusters/hub/overlays/redhat-developer-hub/charts
 clusters/hub/overlays/vault/charts
 clusters/hub/overlays/redhat-developer-hub/rhdh-pull-secret.yml
-clusters/hub/overlays/redhat-developer-hub/rhdh-pull-secret.yaml

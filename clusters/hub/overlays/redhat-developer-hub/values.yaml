@@ -13,8 +13,10 @@ upstream:
       existingSecret: redhat-developer-hub-postgresql     
 
   backstage:
-    # image:
-    #   tag: "1.0"
+    image:
+      registry: registry.redhat.io #doesn't pull secret from an openshift cluster 
+      repository: rhdh/rhdh-hub-rhel9
+      tag: 1.0 #latest from the 1.0 stream
 
     extraEnvVars:
     - name: LOG_LEVEL
@@ -82,8 +84,8 @@ upstream:
         providers:
           keycloakOrg:
             default:
-              baseUrl: https://keycloak-sso.apps.${CLUSTER_BASE_DOMAIN}/auth
-              loginRealm: master
+              baseUrl: https://keycloak-sso.apps.${CLUSTER_BASE_DOMAIN}
+              loginRealm: myorg
               realm: myorg
               clientId: 'backstage'
               clientSecret: '${KEYCLOAK_CLIENT_SECRET}'
